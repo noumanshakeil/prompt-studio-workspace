@@ -1,0 +1,12 @@
+{
+  "project": "prompt-studio-workspace",
+  "resource": "prompts",
+  "samples": [
+    {
+      "id": "pr1",
+      "name": "summarize",
+      "template": "Summarize: {{text}}",
+      "version": 3
+    }
+  ]
+}
