@@ -1,53 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>{{ title }}</title>
-  <link rel="stylesheet" href="/static/styles.css" />
-</head>
-<body>
-  <main>
-    <h1>{{ title }}</h1>
-    <p class="sub">{{ description }} · LLM <span class="pill">{{ llm_mode }}</span></p>
-    <div class="grid">
-      <section class="card">
-        <h2>Create prompt</h2>
-        <form method="post" action="/ui/create">
-        <label>name</label><input name="name" placeholder="name" required />
-<label>template</label><input name="template" placeholder="template" required />
-<label>version</label><input name="version" placeholder="version" required />
-          <button type="submit">Save</button>
-        </form>
-        <h2 style="margin-top:1.25rem">AI action: {{ action }}</h2>
-        <p class="sub">{{ action_desc }}</p>
-        <form method="post" action="/ui/action">
-          <label>prompt</label>
-          <textarea name="prompt" rows="4" placeholder="Describe what you need..."></textarea>
-          <button type="submit">Run {{ action }}</button>
-        </form>
-        {% if last_result %}
-        <h3>Last result</h3>
-        <pre>{{ last_result }}</pre>
-        {% endif %}
-      </section>
-      <section class="card">
-        <h2>{{ resource }} ({{ items|length }})</h2>
-        <table>
-          <thead><tr><th>id</th><th>data</th></tr></thead>
-          <tbody>
-          {% for item in items %}
-            <tr>
-              <td>{{ item.id }}</td>
-              <td><code>{{ item }}</code></td>
-            </tr>
-          {% else %}
-            <tr><td colspan="2">No items yet</td></tr>
-          {% endfor %}
-          </tbody>
-        </table>
-      </section>
-    </div>
-  </main>
-</body>
-</html>
+<!DOCTYPE html><html><head><meta charset="utf-8"/><title>{{ title }}</title>
+<link rel="stylesheet" href="/static/styles.css"/></head><body><main>
+<h1>{{ title }}</h1><p class="sub">Versioned prompts with curly-brace placeholders.</p>
+<div class="grid">
+<section class="card"><h2>Projects</h2><form method="post" action="/ui/projects"><input name="name" required/><button type="submit">Create</button></form>
+<ul>{% for p in projects %}<li><a href="/?project_id={{ p.id }}">{{ p.name }}</a></li>{% endfor %}</ul></section>
+<section class="card">{% if project_id %}
+<h2>Versions</h2><form method="post" action="/ui/versions"><input type="hidden" name="project_id" value="{{ project_id }}"/>
+<textarea name="template" rows="5" placeholder="Hello {{ name }}"></textarea><button type="submit">Save version</button></form>
+<ul>{% for v in versions %}<li>v{{ v.version }} <a href="/?project_id={{ project_id }}&version_id={{ v.id }}">preview</a></li>{% endfor %}</ul>
+{% if version_id %}<form method="post" action="/ui/preview"><input type="hidden" name="version_id" value="{{ version_id }}"/><button type="submit">Run preview</button></form>
+{% for pr in previews %}<pre>{{ pr.rendered }}\n---\n{{ pr.output }}</pre>{% endfor %}{% endif %}
+{% else %}<p class="sub">Create a project.</p>{% endif %}</section></div></main></body></html>

@@ -1,0 +1,13 @@
+[project]
+name = "prompt-studio-workspace"
+version = "2.0.0"
+description = "Versioned prompt workspace with variable placeholders, preview runs, and history — treat prompts like code with semver-style versions and rendered previews."
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
